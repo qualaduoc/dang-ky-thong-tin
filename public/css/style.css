@@ -203,7 +203,7 @@ body {
   z-index: 2;
 }
 
-/* Định vị từng ô Input theo tọa độ % chính xác */
+/* Định vị từng ô Input theo tọa độ % chính xác tuyệt đối */
 .field-slot {
   position: absolute;
   display: flex;
@@ -213,33 +213,33 @@ body {
 /* Ô 1: Họ & Tên */
 .slot-name {
   left: 27.2%;
-  top: 41.2%;
-  width: 45.8%;
-  height: 5.2%;
+  top: 42.5%;
+  width: 45.4%;
+  height: 5.0%;
 }
 
 /* Ô 2: Số Zalo */
 .slot-zalo {
   left: 27.2%;
-  top: 51.7%;
-  width: 45.8%;
-  height: 5.2%;
+  top: 53.0%;
+  width: 45.4%;
+  height: 5.0%;
 }
 
 /* Ô 3: Email */
 .slot-email {
   left: 27.2%;
-  top: 62.1%;
-  width: 45.8%;
-  height: 5.2%;
+  top: 63.6%;
+  width: 45.4%;
+  height: 5.0%;
 }
 
 /* Ô 4: Nút Đăng Ký */
 .slot-submit {
   left: 33.0%;
-  top: 69.5%;
-  width: 34.0%;
-  height: 6.5%;
+  top: 71.3%;
+  width: 33.6%;
+  height: 6.2%;
 }
 
 /* Style cho các ô Input phong cách Dân Gian (Trong suốt, tiệp màu tranh) */
@@ -248,8 +248,8 @@ body {
   height: 100%;
   background: transparent;
   border: 1.5px solid transparent;
-  border-radius: 8px;
-  padding: 0 14px;
+  border-radius: 12px;
+  padding: 0 16px;
   font-family: var(--font-body);
   font-size: clamp(13px, 2.7vw, 16px);
   font-weight: 600;
@@ -267,9 +267,10 @@ body {
 
 /* Khi bấm vào ô nhập */
 .heritage-input:focus {
-  background: rgba(255, 253, 245, 0.6);
-  border-color: var(--gold-dark);
-  box-shadow: 0 0 0 2.5px rgba(212, 175, 55, 0.4), inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 253, 245, 0.45);
+  border-color: rgba(212, 175, 55, 0.7);
+  box-shadow: 0 0 0 2.5px rgba(212, 175, 55, 0.45), inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
 }
 
 /* Tránh lỗi trình duyệt tự đổ màu trắng khi autofill */
@@ -278,7 +279,7 @@ body {
 .heritage-input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #FDF8ED inset !important;
   -webkit-text-fill-color: #240F04 !important;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 /* Trạng thái lỗi: Viền đỏ tinh tế không che chữ bên dưới */
