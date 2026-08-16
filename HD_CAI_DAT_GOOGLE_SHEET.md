@@ -58,9 +58,9 @@ npm start
 
 Hệ thống sẽ tự động vẽ tiêu đề đẹp mắt và định dạng chuẩn:
 
-| Cột A | Cột B | Cột C | Cột D | Cột E | Cột F | Cột G |
-|---|---|---|---|---|---|---|
-| **Thời Gian** | **Họ Và Tên** | **Email Học Viên** | **Số Zalo / Phone** | **Khóa Học Đăng Ký** | **Ghi Chú / Nguyện Vọng** | **Trạng Thái** |
+| Cột A | Cột B | Cột C | Cột D | Cột E |
+|---|---|---|---|---|
+| **Thời Gian** | **Họ Và Tên** | **Email Học Viên** | **Số Zalo / Phone** | **Trạng Thái** |
 
 ---
 
@@ -69,9 +69,9 @@ Hệ thống sẽ tự động vẽ tiêu đề đẹp mắt và định dạng 
 Nếu Khầy muốn lọc hoặc đếm dữ liệu theo thời gian, có thể dùng công thức sau ở 1 Sheet báo cáo mới:
 
 ```sql
--- Lọc danh sách học viên đăng ký trong ngày hôm nay:
-=QUERY(DanhSachHocVien!A:G, "SELECT B, C, D, E, F WHERE A IS NOT NULL ORDER BY A DESC", 1)
+-- Lọc danh sách học viên (Xếp theo thời gian đăng ký mới nhất):
+=QUERY(DanhSachHocVien!A:E, "SELECT B, C, D, A WHERE A IS NOT NULL ORDER BY A DESC", 1)
 
--- Đếm tổng số học viên đăng ký theo từng khóa học:
-=QUERY(DanhSachHocVien!A:G, "SELECT E, COUNT(B) WHERE E IS NOT NULL GROUP BY E LABEL COUNT(B) 'Số Lượng Học Viên'", 1)
+-- Đếm tổng số lượng học viên đã đăng ký:
+=COUNTA(DanhSachHocVien!B2:B)
 ```

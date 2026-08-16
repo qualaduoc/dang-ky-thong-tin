@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const fullNameInput = document.getElementById('fullName');
   const emailInput = document.getElementById('email');
   const zaloInput = document.getElementById('zalo');
-  const courseInput = document.getElementById('course');
-  const noteInput = document.getElementById('note');
   const submitBtn = document.getElementById('submitBtn');
   const btnText = submitBtn.querySelector('.btn-text');
   const btnLoader = submitBtn.querySelector('.btn-loader');
@@ -234,9 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const postData = {
       fullName: fullNameInput.value.trim(),
       email: emailInput.value.trim().toLowerCase(),
-      zalo: cleanZalo,
-      course: courseInput.value,
-      note: noteInput.value.trim()
+      zalo: cleanZalo
     };
 
     // Chuyển sang trạng thái đang tải (Loading State)

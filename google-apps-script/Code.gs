@@ -130,9 +130,7 @@ function handleRegistration(data) {
     fullName,     // Cột B: Họ và tên
     email,        // Cột C: Email
     "'" + zalo,   // Cột D: Số Zalo (thêm ' để giữ số 0 ở đầu)
-    course,       // Cột E: Khóa học quan tâm
-    note,         // Cột F: Ghi chú / Mục tiêu
-    "Đã xác nhận" // Cột G: Trạng thái
+    "Đã xác nhận" // Cột E: Trạng thái
   ];
 
   sheet.appendRow(newRow);
@@ -141,7 +139,7 @@ function handleRegistration(data) {
   var newRowIndex = sheet.getLastRow();
   sheet.getRange(newRowIndex, 1).setHorizontalAlignment("center");
   sheet.getRange(newRowIndex, 4).setHorizontalAlignment("center");
-  sheet.getRange(newRowIndex, 7).setHorizontalAlignment("center");
+  sheet.getRange(newRowIndex, 5).setHorizontalAlignment("center");
 
   return createJsonResponse({
     success: true,
@@ -221,8 +219,6 @@ function getOrCreateSheet() {
       "Họ Và Tên", 
       "Email Học Viên", 
       "Số Zalo / Phone", 
-      "Khóa Học Đăng Ký", 
-      "Ghi Chú / Nguyện Vọng", 
       "Trạng Thái"
     ];
     sheet.appendRow(headers);
@@ -240,13 +236,11 @@ function getOrCreateSheet() {
     sheet.setFrozenRows(1);
 
     // Độ rộng các cột
-    sheet.setColumnWidth(1, 160); // Thời gian
-    sheet.setColumnWidth(2, 200); // Họ tên
-    sheet.setColumnWidth(3, 240); // Email
-    sheet.setColumnWidth(4, 150); // Số Zalo
-    sheet.setColumnWidth(5, 200); // Khóa học
-    sheet.setColumnWidth(6, 250); // Ghi chú
-    sheet.setColumnWidth(7, 140); // Trạng thái
+    sheet.setColumnWidth(1, 170); // Thời gian
+    sheet.setColumnWidth(2, 220); // Họ tên
+    sheet.setColumnWidth(3, 260); // Email
+    sheet.setColumnWidth(4, 160); // Số Zalo
+    sheet.setColumnWidth(5, 140); // Trạng thái
   }
 
   return sheet;
