@@ -140,7 +140,8 @@ app.post('/api/check-duplicate', async (req, res) => {
       const response = await fetch(GOOGLE_SHEET_WEBAPP_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'check', email, zalo })
+        body: JSON.stringify({ action: 'check', email, zalo }),
+        redirect: 'follow'
       });
       const result = await response.json();
       return res.json(result);
@@ -172,7 +173,7 @@ app.post('/api/check-duplicate', async (req, res) => {
 // [POST] Đăng ký thông tin học viên
 app.post('/api/register', registerLimiter, async (req, res) => {
   try {
-    const { fullName, email, zalo, course, note } = req.body;
+    const { fullName, email, zalo } = req.body;
 
     // Validate dữ liệu
     const validationError = validateStudentData({ fullName, email, zalo });
@@ -191,10 +192,9 @@ app.post('/api/register', registerLimiter, async (req, res) => {
           action: 'register',
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
-          zalo: zalo.trim(),
-          course: course || 'Khóa học tiêu chuẩn',
-          note: note || ''
-        })
+          zalo: zalo.trim()
+        }),
+        redirect: 'follow'
       });
 
       const result = await response.json();
