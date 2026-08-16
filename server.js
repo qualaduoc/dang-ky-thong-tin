@@ -36,10 +36,11 @@ const registerLimiter = rateLimit({
 // Phục vụ file tĩnh (Frontend)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// File lưu trữ tạm thời khi chưa cấu hình Google Sheet URL (Mock Mode)
-const LOCAL_DB_PATH = path.join(__dirname, 'data', 'local_students.json');
-if (!fs.existsSync(path.join(__dirname, 'data'))) {
-  fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
+// File lưu trữ tạm thời khi chưa cấu hình Google Sheet URL (Tự động thích ứng môi trường Serverless Vercel)
+const DATA_DIR = process.env.VERCEL ? '/tmp' : path.join(__dirname, 'data');
+const LOCAL_DB_PATH = path.join(DATA_DIR, 'local_students.json');
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 if (!fs.existsSync(LOCAL_DB_PATH)) {
   fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify([]));
@@ -201,8 +202,8 @@ app.post('/api/register', registerLimiter, async (req, res) => {
       return res.json(result);
     } else {
       // Nếu chưa có Google Sheet URL -> Dùng Local Mock DB
-      console.warn('⚠️ GOOGLE_SHEET_WEBAPP_URL chưa cấu hình, đang lưu tạm vào file data/local_students.json');
-      const localResult = handleLocalRegister({ fullName, email, zalo, course, note });
+      console.warn('⚠️ GOOGLE_SHEET_WEBAPP_URL chưa cấu hình, đang lưu tạm vào local database.');
+      const localResult = handleLocalRegister({ fullName, email, zalo });
       return res.json(localResult);
     }
   } catch (error) {
@@ -214,11 +215,16 @@ app.post('/api/register', registerLimiter, async (req, res) => {
   }
 });
 
-// Khởi động Server
-app.listen(PORT, () => {
-  console.log(`\n=================================================`);
-  console.log(`🎓 HỆ THỐNG ĐĂNG KÝ HỌC VIÊN ĐANG HOẠT ĐỘNG`);
-  console.log(`🌐 Truy cập trang web tại: http://localhost:${PORT}`);
-  console.log(`📊 Trạng thái Google Sheet: ${GOOGLE_SHEET_WEBAPP_URL ? '✅ Đã kết nối' : '⚠️ Chưa cấu hình URL (Đang dùng Mock DB)'}`);
-  console.log(`=================================================\n`);
-});
+// Khởi động Server khi chạy độc lập (Local hoặc VPS)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n=================================================`);
+    console.log(`🎓 HỆ THỐNG ĐĂNG KÝ HỌC VIÊN ĐANG HOẠT ĐỘNG`);
+    console.log(`🌐 Truy cập trang web tại: http://localhost:${PORT}`);
+    console.log(`📊 Trạng thái Google Sheet: ${GOOGLE_SHEET_WEBAPP_URL ? '✅ Đã kết nối' : '⚠️ Chưa cấu hình URL (Đang dùng Mock DB)'}`);
+    console.log(`=================================================\n`);
+  });
+}
+
+// Xuất app để tương thích hoàn hảo với Vercel Serverless Functions
+module.exports = app;
