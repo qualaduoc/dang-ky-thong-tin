@@ -39,12 +39,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 // File lưu trữ tạm thời khi chưa cấu hình Google Sheet URL (Tự động thích ứng môi trường Serverless Vercel)
 const DATA_DIR = process.env.VERCEL ? '/tmp' : path.join(__dirname, 'data');
 const LOCAL_DB_PATH = path.join(DATA_DIR, 'local_students.json');
+const LOCAL_SURVEY_PATH = path.join(DATA_DIR, 'local_surveys.json');
+
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 if (!fs.existsSync(LOCAL_DB_PATH)) {
   fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify([]));
 }
+if (!fs.existsSync(LOCAL_SURVEY_PATH)) {
+  fs.writeFileSync(LOCAL_SURVEY_PATH, JSON.stringify([]));
+}
+
+// Định tuyến trang Khảo sát độc lập (/khaosat & /khao-sat)
+app.get(['/khaosat', '/khao-sat'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'khaosat.html'));
+});
 
 // 2. Helper: Validate định dạng dữ liệu phía Server
 function validateStudentData(data) {
@@ -215,12 +225,151 @@ app.post('/api/register', registerLimiter, async (req, res) => {
   }
 });
 
+// [POST] Gửi phiếu khảo sát học viên
+app.post('/api/survey-submit', registerLimiter, async (req, res) => {
+  try {
+    const { fullName, zalo, answers } = req.body;
+
+    if (!fullName || typeof fullName !== 'string' || fullName.trim().length < 2) {
+      return res.status(400).json({ success: false, message: 'Vui lòng nhập họ và tên của bạn.' });
+    }
+
+    let cleanZalo = (zalo || '').toString().trim().replace(/[\s\.\-\+]/g, '');
+    if (cleanZalo.startsWith('84')) cleanZalo = '0' + cleanZalo.substring(2);
+    const phoneRegex = /^(03|05|07|08|09)\d{8}$/;
+    if (!phoneRegex.test(cleanZalo)) {
+      return res.status(400).json({ success: false, message: 'Số Zalo không hợp lệ (cần là số điện thoại VN 10 số).' });
+    }
+
+    // Luôn lưu local để đảm bảo dữ liệu khảo sát và tính toán % tức thì
+    const raw = fs.readFileSync(LOCAL_SURVEY_PATH, 'utf-8');
+    const surveys = JSON.parse(raw || '[]');
+
+    const newSurvey = {
+      id: Date.now(),
+      fullName: fullName.trim(),
+      zalo: cleanZalo,
+      answers: answers || {},
+      submittedAt: new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+    };
+
+    surveys.push(newSurvey);
+    fs.writeFileSync(LOCAL_SURVEY_PATH, JSON.stringify(surveys, null, 2));
+    const localStats = calculateLocalSurveyStats();
+
+    if (GOOGLE_SHEET_WEBAPP_URL && GOOGLE_SHEET_WEBAPP_URL.startsWith('https://script.google.com/')) {
+      console.log(`[Google Sheet] Đang gửi phiếu khảo sát của học viên ${fullName} (${cleanZalo})...`);
+      try {
+        const response = await fetch(GOOGLE_SHEET_WEBAPP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'survey_submit',
+            fullName: fullName.trim(),
+            zalo: cleanZalo,
+            answers: answers || {}
+          }),
+          redirect: 'follow'
+        });
+
+        const result = await response.json();
+        if (result.success && result.data) {
+          return res.json(result);
+        }
+      } catch (err) {
+        console.warn('Google Sheet chưa cập nhật Code.gs mới, sử dụng số liệu local:', err);
+      }
+    }
+
+    return res.json({
+      success: true,
+      message: 'Gửi phiếu khảo sát thành công!',
+      data: localStats
+    });
+  } catch (error) {
+    console.error('Lỗi khi gửi phiếu khảo sát:', error);
+    return res.status(500).json({ success: false, message: 'Có lỗi khi lưu phiếu khảo sát. Vui lòng thử lại.' });
+  }
+});
+
+// [GET] Thống kê kết quả khảo sát Realtime (%)
+app.get('/api/survey-stats', async (req, res) => {
+  try {
+    const localStats = calculateLocalSurveyStats();
+    if (GOOGLE_SHEET_WEBAPP_URL && GOOGLE_SHEET_WEBAPP_URL.startsWith('https://script.google.com/')) {
+      try {
+        const response = await fetch(`${GOOGLE_SHEET_WEBAPP_URL}?action=survey_stats`, {
+          method: 'GET',
+          redirect: 'follow'
+        });
+        const result = await response.json();
+        if (result.success && result.data && result.data.totalResponses > 0) {
+          return res.json(result);
+        }
+      } catch (e) {
+        // Fallback local
+      }
+    }
+    return res.json({
+      success: true,
+      message: 'Lấy thống kê khảo sát thành công!',
+      data: localStats
+    });
+  } catch (error) {
+    console.error('Lỗi khi lấy thống kê khảo sát:', error);
+    return res.status(500).json({ success: false, message: 'Không thể tải thống kê khảo sát.' });
+  }
+});
+
+// Helper tính thống kê local
+function calculateLocalSurveyStats() {
+  try {
+    const raw = fs.readFileSync(LOCAL_SURVEY_PATH, 'utf-8');
+    const surveys = JSON.parse(raw || '[]');
+    const stats = {
+      totalResponses: surveys.length,
+      questions: {}
+    };
+
+    for (let q = 1; q <= 10; q++) {
+      stats.questions[`q${q}`] = { total: 0, options: {} };
+    }
+
+    surveys.forEach(s => {
+      for (let q = 1; q <= 10; q++) {
+        const qKey = `q${q}`;
+        const ans = s.answers && s.answers[qKey];
+        if (ans) {
+          stats.questions[qKey].total = (stats.questions[qKey].total || 0) + 1;
+          stats.questions[qKey].options[ans] = (stats.questions[qKey].options[ans] || 0) + 1;
+        }
+      }
+    });
+
+    for (const qKey in stats.questions) {
+      const qData = stats.questions[qKey];
+      const percentages = {};
+      if (qData.total > 0) {
+        for (const opt in qData.options) {
+          percentages[opt] = Math.round((qData.options[opt] / qData.total) * 1000) / 10;
+        }
+      }
+      qData.percentages = percentages;
+    }
+
+    return stats;
+  } catch (e) {
+    return { totalResponses: 0, questions: {} };
+  }
+}
+
 // Khởi động Server khi chạy độc lập (Local hoặc VPS)
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`\n=================================================`);
-    console.log(`🎓 HỆ THỐNG ĐĂNG KÝ HỌC VIÊN ĐANG HOẠT ĐỘNG`);
-    console.log(`🌐 Truy cập trang web tại: http://localhost:${PORT}`);
+    console.log(`🎓 HỆ THỐNG ĐĂNG KÝ & KHẢO SÁT HỌC VIÊN ĐANG HOẠT ĐỘNG`);
+    console.log(`🌐 Trang Đăng Ký: http://localhost:${PORT}`);
+    console.log(`📝 Trang Khảo Sát: http://localhost:${PORT}/khaosat`);
     console.log(`📊 Trạng thái Google Sheet: ${GOOGLE_SHEET_WEBAPP_URL ? '✅ Đã kết nối' : '⚠️ Chưa cấu hình URL (Đang dùng Mock DB)'}`);
     console.log(`=================================================\n`);
   });

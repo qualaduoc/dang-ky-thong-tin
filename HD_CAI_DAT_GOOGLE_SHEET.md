@@ -56,11 +56,15 @@ npm start
 
 ## 📊 Cấu Trúc Bảng Dữ Liệu Tự Động Tạo Trên Google Sheet
 
-Hệ thống sẽ tự động vẽ tiêu đề đẹp mắt và định dạng chuẩn:
-
+### 1. Bảng Đăng Ký Học Viên (`DanhSachHocVien`):
 | Cột A | Cột B | Cột C | Cột D | Cột E |
 |---|---|---|---|---|
 | **Thời Gian** | **Họ Và Tên** | **Email Học Viên** | **Số Zalo / Phone** | **Trạng Thái** |
+
+### 2. Bảng Khảo Sát Học Viên (`KhaoSatHocVien`):
+| Cột A | Cột B | Cột C | Cột D -> M (10 Câu Khảo Sát) |
+|---|---|---|---|
+| **Thời Gian** | **Họ Và Tên** | **Số Zalo** | **Q1 .. Q10 (Kết quả bình chọn)** |
 
 ---
 
@@ -69,9 +73,12 @@ Hệ thống sẽ tự động vẽ tiêu đề đẹp mắt và định dạng 
 Nếu Khầy muốn lọc hoặc đếm dữ liệu theo thời gian, có thể dùng công thức sau ở 1 Sheet báo cáo mới:
 
 ```sql
--- Lọc danh sách học viên (Xếp theo thời gian đăng ký mới nhất):
+-- 1. Lọc danh sách đăng ký học viên (Xếp theo thời gian đăng ký mới nhất):
 =QUERY(DanhSachHocVien!A:E, "SELECT B, C, D, A WHERE A IS NOT NULL ORDER BY A DESC", 1)
 
--- Đếm tổng số lượng học viên đã đăng ký:
-=COUNTA(DanhSachHocVien!B2:B)
+-- 2. Lọc danh sách khảo sát và thể loại Game học viên quan tâm (Cột Q7 - Cột J):
+=QUERY(KhaoSatHocVien!A:M, "SELECT B, C, J, A WHERE A IS NOT NULL ORDER BY A DESC", 1)
+
+-- 3. Thống kê thể loại Game được học viên mong muốn học nhất:
+=QUERY(KhaoSatHocVien!A:M, "SELECT J, COUNT(B) WHERE J IS NOT NULL GROUP BY J ORDER BY COUNT(B) DESC", 1)
 ```

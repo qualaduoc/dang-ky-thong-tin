@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khảo Sát Học Viên: AI & Game Giáo Dục | ETA School</title>
+  <meta name="description" content="Phiếu khảo sát trình độ AI và định hướng phát triển Game Giáo Dục với Agnes AI - ETA School. Xem kết quả bình chọn realtime.">
+  
+  <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/survey.css">
+</head>
+<body>
+
+  <!-- Background Traditional Elements -->
+  <div class="vietnamese-bg">
+    <div class="lantern-glow glow-top"></div>
+    <div class="lantern-glow glow-bottom"></div>
+    <div class="traditional-clouds cloud-left"></div>
+    <div class="traditional-clouds cloud-right"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="page-container">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="badge-heritage">
+        <span class="heritage-dot"></span>
+        <span>KHÓA HỌC LẬP TRÌNH GAMES CẤP TỐC K01 2026</span>
+        <span class="heritage-dot"></span>
+      </div>
+      <h1 class="main-title-heritage">Phiếu Khảo Sát Học Viên</h1>
+      <p class="subtitle-heritage">
+        Đánh giá trình độ ứng dụng AI & Định hướng phát triển Game tương tác giáo dục cùng <strong>Agnes AI</strong>
+      </p>
+    </header>
+
+    <!-- Navigation Tabs (Điền khảo sát ⟷ Xem kết quả Realtime) -->
+    <nav class="survey-tabs">
+      <button type="button" class="tab-btn active" id="tabFormBtn">
+        <i data-lucide="edit-3" class="tab-icon"></i>
+        <span>Điền Phiếu Khảo Sát</span>
+      </button>
+      <button type="button" class="tab-btn" id="tabStatsBtn">
+        <i data-lucide="bar-chart-2" class="tab-icon"></i>
+        <span>Kết Quả Bình Chọn Realtime (%)</span>
+        <span class="live-pill"><span class="live-dot"></span>LIVE</span>
+      </button>
+    </nav>
+
+    <!-- TAB 1: FORM KHẢO SÁT (10 CÂU HỎI) -->
+    <section class="tab-content active" id="viewForm">
+      
+      <!-- Progress Bar cố định -->
+      <div class="progress-card">
+        <div class="progress-info">
+          <span class="progress-title"><i data-lucide="check-circle-2"></i> Tiến độ hoàn thành:</span>
+          <span class="progress-count" id="progressText">0/10 câu</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <form id="surveyForm" novalidate>
+        
+        <!-- Khối Thông Tin Học Viên -->
+        <div class="scroll-card identity-card">
+          <div class="card-ribbon"><span>THÔNG TIN NGƯỜI THAM GIA</span></div>
+          <p class="identity-desc">Vui lòng điền thông tin để Thầy ghi nhận ý kiến đóng góp của bạn</p>
+          
+          <div class="identity-grid">
+            <div class="input-field-box" id="group-fullName">
+              <label for="fullName" class="field-label">Họ và Tên <span class="req">*</span></label>
+              <div class="field-input-wrapper">
+                <i data-lucide="user" class="field-icon"></i>
+                <input type="text" id="fullName" name="fullName" class="field-input" placeholder="Ví dụ: Nguyễn Văn An" required>
+              </div>
+            </div>
+
+            <div class="input-field-box" id="group-zalo">
+              <label for="zalo" class="field-label">Số Điện Thoại Zalo <span class="req">*</span></label>
+              <div class="field-input-wrapper">
+                <i data-lucide="phone" class="field-icon"></i>
+                <input type="tel" id="zalo" name="zalo" class="field-input" placeholder="Ví dụ: 0912 345 678" maxlength="15" required>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHẦN 1: KỸ NĂNG & HIỂU BIẾT VỀ AI (CÂU 1 -> 5) -->
+        <div class="section-divider">
+          <div class="divider-line"></div>
+          <div class="divider-badge">
+            <i data-lucide="bot"></i>
+            <span>PHẦN 1: HIỂU BIẾT & KỸ NĂNG DÙNG AI</span>
+          </div>
+          <div class="divider-line"></div>
+        </div>
+
+        <!-- Câu 1 -->
+        <div class="scroll-card question-card" data-q="q1">
+          <div class="q-header">
+            <span class="q-badge">01</span>
+            <h3 class="q-title">Mức độ sử dụng các công cụ AI (ChatGPT, Claude, Gemini...) của bạn?</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q1" value="Chưa từng dùng">
+              <span class="custom-radio"></span>
+              <span class="option-text">Mới bắt đầu / Chưa từng sử dụng</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Thỉnh thoảng tra cứu">
+              <span class="custom-radio"></span>
+              <span class="option-text">Thỉnh thoảng tra cứu thông tin / hỏi đáp đơn giản</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Dùng thường xuyên">
+              <span class="custom-radio"></span>
+              <span class="option-text">Dùng thường xuyên để soạn giáo án, viết nội dung</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Thành thạo Prompt nâng cao">
+              <span class="custom-radio"></span>
+              <span class="option-text">Đã thành thạo kỹ thuật viết Prompt nâng cao (Role, Context, Chain-of-thought)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Câu 2 -->
+        <div class="scroll-card question-card" data-q="q2">
+          <div class="q-header">
+            <span class="q-badge">02</span>
+            <h3 class="q-title">Bạn đã từng biết hoặc sử dụng nền tảng Agnes AI chưa?</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q2" value="Chưa từng nghe">
+              <span class="custom-radio"></span>
+              <span class="option-text">Chưa từng nghe tới Agnes AI</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="Đã nghe nhưng chưa dùng">
+              <span class="custom-radio"></span>
+              <span class="option-text">Đã nghe giới thiệu nhưng chưa thử tạo game bao giờ</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="Đã tạo thử game mẫu">
+              <span class="custom-radio"></span>
+              <span class="option-text">Đã dùng thử để tạo một vài game/ứng dụng mẫu cơ bản</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="Đã thành thạo Agnes AI">
+              <span class="custom-radio"></span>
+              <span class="option-text">Đã thành thạo tạo game và tùy biến logic với Agnes AI</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Câu 3 -->
+        <div class="scroll-card question-card" data-q="q3">
+          <div class="q-header">
+            <span class="q-badge">03</span>
+            <h3 class="q-title">Khả năng tư duy logic và nền tảng kỹ thuật hiện tại của bạn:</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q3" value="Hoàn toàn mới">
+              <span class="custom-radio"></span>
+              <span class="option-text">Hoàn toàn là người mới, chưa từng học lập trình</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q3" value="Đã dùng No-code kéo thả">
+              <span class="custom-radio"></span>
+              <span class="option-text">Đã từng dùng công cụ No-code kéo thả (Scratch, Canva, AppSheet...)</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q3" value="Đã biết lập trình cơ bản">
+              <span class="custom-radio"></span>
+              <span class="option-text">Đã có nền tảng cơ bản về HTML/CSS/JavaScript hoặc Python</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Câu 4 -->
+        <div class="scroll-card question-card" data-q="q4">
+          <div class="q-header">
+            <span class="q-badge">04</span>
+            <h3 class="q-title">Rào cản lớn nhất của bạn khi ứng dụng AI vào công việc / giảng dạy?</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q4" value="Chưa biết viết Prompt chuẩn">
+              <span class="custom-radio"></span>
+              <span class="option-text">Chưa biết cách viết câu lệnh (Prompt) để AI làm đúng ý mình</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q4" value="Sợ AI trả kết quả sai">
+              <span class="custom-radio"></span>
+              <span class="option-text">Sợ kết quả AI không chính xác, khó kiểm soát chất lượng</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q4" value="Thiếu ý tưởng ứng dụng">
+              <span class="custom-radio"></span>
+              <span class="option-text">Thiếu ý tưởng sáng tạo và phương pháp ứng dụng thực tế vào bài dạy</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Câu 5 -->
+        <div class="scroll-card question-card" data-q="q5">
+          <div class="q-header">
+            <span class="q-badge">05</span>
+            <h3 class="q-title">Thời gian bạn có thể dành để thực hành làm Game AI mỗi tuần:</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q5" value="Dưới 2 giờ/tuần">
+              <span class="custom-radio"></span>
+              <span class="option-text">Dưới 2 giờ / tuần (Chỉ có thời gian xem video bài giảng)</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q5" value="2 đến 5 giờ/tuần">
+              <span class="custom-radio"></span>
+              <span class="option-text">Từ 2 đến 5 giờ / tuần (Vừa học vừa hoàn thành bài tập)</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q5" value="Trên 5 giờ/tuần">
+              <span class="custom-radio"></span>
+              <span class="option-text">Trên 5 giờ / tuần (Quyết tâm làm chủ công cụ và xuất bản game)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- PHẦN 2: GAME TƯƠNG TÁC GIÁO DỤC (CÂU 6 -> 10) -->
+        <div class="section-divider">
+          <div class="divider-line"></div>
+          <div class="divider-badge">
+            <i data-lucide="gamepad-2"></i>
+            <span>PHẦN 2: GAME TƯƠNG TÁC TRONG GIÁO DỤC</span>
+          </div>
+          <div class="divider-line"></div>
+        </div>
+
+        <!-- Câu 6 -->
+        <div class="scroll-card question-card" data-q="q6">
+          <div class="q-header">
+            <span class="q-badge">06</span>
+            <h3 class="q-title">Mục tiêu lớn nhất của bạn khi học làm Game giáo dục:</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q6" value="Tăng tương tác trên lớp">
+              <span class="custom-radio"></span>
+              <span class="option-text">Tạo trò chơi khởi động, chống buồn ngủ cho học sinh trong tiết học</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q6" value="Số hóa bài tập về nhà">
+              <span class="custom-radio"></span>
+              <span class="option-text">Số hóa bài tập về nhà thành game thử thách để học sinh tự giác học</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q6" value="Tổ chức sự kiện đố vui">
+              <span class="custom-radio"></span>
+              <span class="option-text">Tổ chức các cuộc thi/sự kiện đố vui trực tuyến cho trường học</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q6" value="Kinh doanh sản phẩm EdTech">
+              <span class="custom-radio"></span>
+              <span class="option-text">Đóng gói sản phẩm Game tương tác để kinh doanh hoặc làm dịch vụ</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Câu 7 -->
+        <div class="scroll-card question-card" data-q="q7">
+          <div class="q-header">
+            <span class="q-badge">07</span>
+            <h3 class="q-title">Thể loại Game giáo dục bạn mong muốn tự tay tạo ra nhất:</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q7" value="Game Trắc nghiệm & Vòng quay">
+              <span class="custom-radio"></span>
+              <span class="option-text"><strong>Game Trắc nghiệm:</strong> Vòng quay may mắn, Chiếc nón kỳ diệu, Ai là triệu phú</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q7" value="Game Lật thẻ & Từ vựng">
+              <span class="custom-radio"></span>
+              <span class="option-text"><strong>Game Trí nhớ:</strong> Lật thẻ bài, Ghép đôi hình - chữ, Nối từ nhanh</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q7" value="Game Phiêu lưu & Giải đố">
+              <span class="custom-radio"></span>
+              <span class="option-text"><strong>Game Phiêu lưu:</strong> Vượt chướng ngại vật, Giải cứu thế giới qua câu hỏi</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q7" value="Game Mô phỏng tình huống">
+              <span class="custom-radio"></span>
+              <span class="option-text"><strong>Game Mô phỏng:</strong> Tương tác giải quyết tình huống theo cốt truyện</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Câu 8 -->
+        <div class="scroll-card question-card" data-q="q8">
+          <div class="q-header">
+            <span class="q-badge">08</span>
+            <h3 class="q-title">Đối tượng người học (học sinh) mà bạn hướng tới phục vụ:</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q8" value="Mầm non & Tiểu học">
+              <span class="custom-radio"></span>
+              <span class="option-text">Mầm non & Tiểu học (Cần hình ảnh bắt mắt, âm thanh vui nhộn)</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q8" value="THCS & THPT">
+              <span class="custom-radio"></span>
+              <span class="option-text">THCS & THPT (Cần tính thử thách, cạnh tranh bảng xếp hạng)</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q8" value="Sinh viên & Người đi làm">
+              <span class="custom-radio"></span>
+              <span class="option-text">Sinh viên & Người đi làm (Cần tình huống thực tế, gamification đào tạo)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Câu 9 -->
+        <div class="scroll-card question-card" data-q="q9">
+          <div class="q-header">
+            <span class="q-badge">09</span>
+            <h3 class="q-title">Yếu tố nào trong Game giáo dục bạn đánh giá là quan trọng nhất?</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q9" value="Chơi mượt không cần cài app">
+              <span class="custom-radio"></span>
+              <span class="option-text">Học sinh chơi được ngay trên web điện thoại/máy tính không cần cài app</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q9" value="Tính điểm & Bảng xếp hạng">
+              <span class="custom-radio"></span>
+              <span class="option-text">Có tính năng tính điểm, bảng xếp hạng (Leaderboard) vinh danh học sinh</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q9" value="Dễ đổi nội dung bài học">
+              <span class="custom-radio"></span>
+              <span class="option-text">Dễ dàng thay đổi bộ câu hỏi bài học sau này mà không cần code lại</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Câu 10 -->
+        <div class="scroll-card question-card" data-q="q10">
+          <div class="q-header">
+            <span class="q-badge">10</span>
+            <h3 class="q-title">Kỳ vọng lớn nhất của bạn sau khi kết thúc khóa học cùng Thầy Được:</h3>
+          </div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q10" value="Xuất bản 2-3 game đưa vào dạy ngay">
+              <span class="custom-radio"></span>
+              <span class="option-text">Tự tay xuất bản ít nhất 2–3 Game hoàn chỉnh đưa vào giảng dạy ngay</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q10" value="Làm chủ tự thiết kế mọi game">
+              <span class="custom-radio"></span>
+              <span class="option-text">Hiểu sâu bản chất để tự thiết kế bất kỳ ý tưởng game nào trong tương lai</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q10" value="Đồng hành hỗ trợ kỹ thuật lâu dài">
+              <span class="custom-radio"></span>
+              <span class="option-text">Được tham gia cộng đồng giáo viên ứng dụng AI và hỗ trợ kỹ thuật lâu dài</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-submit-container">
+          <button type="submit" id="submitSurveyBtn" class="btn-submit-survey">
+            <span class="btn-text">
+              <i data-lucide="send" class="btn-icon"></i>
+              Gửi Phiếu Khảo Sát & Xem Kết Quả Realtime
+            </span>
+            <span class="btn-loader" style="display: none;">
+              <span class="survey-spinner"></span>
+              Đang lưu phiếu & tính toán %...
+            </span>
+          </button>
+        </div>
+
+      </form>
+
+    </section>
+
+    <!-- TAB 2: KẾT QUẢ BÌNH CHỌN REALTIME (%) -->
+    <section class="tab-content" id="viewStats">
+      
+      <!-- Stats Control Header -->
+      <div class="stats-header-card">
+        <div class="stats-meta">
+          <div class="stats-total-pill">
+            <i data-lucide="users" class="stats-icon"></i>
+            <span>Tổng lượt bình chọn: <strong id="statsTotalCount">0</strong> học viên</span>
+          </div>
+          <span class="pulse-status"><span class="pulse-dot"></span>Cập nhật thời gian thực</span>
+        </div>
+        <button type="button" class="btn-refresh" id="refreshStatsBtn" title="Tải lại số liệu">
+          <i data-lucide="refresh-cw" class="refresh-icon"></i>
+          <span>Làm mới kết quả</span>
+        </button>
+      </div>
+
+      <!-- Container hiển thị 10 khối kết quả % -->
+      <div class="stats-list" id="statsListContainer">
+        <!-- Render động bằng JavaScript -->
+      </div>
+
+    </section>
+
+    <!-- Footer Chân Trang -->
+    <footer class="heritage-footer">
+      <p>Bản quyền thuộc về <strong>ETA School</strong> - <a href="https://home.aiphocap.vn" target="_blank" rel="noopener noreferrer" class="footer-link">https://home.aiphocap.vn</a></p>
+    </footer>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/survey.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

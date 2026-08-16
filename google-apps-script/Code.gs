@@ -1,31 +1,43 @@
 /**
  * ===================================================================
- * GOOGLE APPS SCRIPT - HỆ THỐNG ĐĂNG KÝ HỌC VIÊN TỰ ĐỘNG
- * Chức năng: Lưu thông tin học viên, chống đăng ký trùng lặp (Email, Số Zalo)
+ * GOOGLE APPS SCRIPT - HỆ THỐNG ĐĂNG KÝ & KHẢO SÁT HỌC VIÊN
+ * Chức năng: 
+ * 1. Lưu thông tin đăng ký & chống trùng lặp (Sheet: DanhSachHocVien)
+ * 2. Lưu kết quả khảo sát & tính toán tỷ lệ % realtime (Sheet: KhaoSatHocVien)
  * ===================================================================
  */
 
-// Tên Sheet lưu dữ liệu (Mặc định là Sheet1 hoặc DanhSachHocVien)
-var SHEET_NAME = "DanhSachHocVien";
+var SHEET_REGISTRATION = "DanhSachHocVien";
+var SHEET_SURVEY = "KhaoSatHocVien";
 
 /**
- * Xử lý yêu cầu POST (Đăng ký mới hoặc kiểm tra trùng lặp)
+ * Xử lý yêu cầu POST
  */
 function doPost(e) {
   var lock = LockService.getScriptLock();
-  // Chờ tối đa 10 giây để tránh xung đột khi nhiều người bấm cùng lúc
   lock.tryLock(10000);
 
   try {
     var rawData = e.postData ? e.postData.contents : "{}";
     var data = JSON.parse(rawData);
-
     var action = data.action || "register";
 
+    // 1. Kiểm tra trùng lặp nhanh
     if (action === "check") {
       return checkDuplicateOnly(data);
     }
 
+    // 2. Gửi kết quả khảo sát
+    if (action === "survey_submit") {
+      return handleSurveySubmit(data);
+    }
+
+    // 3. Lấy thống kê khảo sát realtime
+    if (action === "survey_stats") {
+      return getSurveyStats();
+    }
+
+    // 4. Đăng ký học viên mặc định
     return handleRegistration(data);
   } catch (error) {
     return createJsonResponse({
@@ -38,10 +50,13 @@ function doPost(e) {
 }
 
 /**
- * Xử lý yêu cầu GET (Kiểm tra trạng thái kết nối Web App)
+ * Xử lý yêu cầu GET
  */
 function doGet(e) {
   var params = e.parameter || {};
+  if (params.action === "survey_stats") {
+    return getSurveyStats();
+  }
   if (params.action === "ping") {
     return createJsonResponse({
       success: true,
@@ -50,21 +65,20 @@ function doGet(e) {
   }
   return createJsonResponse({
     success: true,
-    message: "Google Apps Script Đăng Ký Học Viên đang sẵn sàng tiếp nhận dữ liệu."
+    message: "Google Apps Script Đăng Ký & Khảo Sát đang sẵn sàng tiếp nhận dữ liệu."
   });
 }
 
 /**
- * Xử lý đăng ký mới và kiểm tra trùng lặp
+ * ===================================================================
+ * MODULE 1: ĐĂNG KÝ HỌC VIÊN (Chống trùng lặp Email, Số Zalo)
+ * ===================================================================
  */
 function handleRegistration(data) {
   var fullName = (data.fullName || "").trim();
   var email = (data.email || "").trim().toLowerCase();
   var zalo = (data.zalo || "").trim();
-  var note = (data.note || "").trim();
-  var course = (data.course || "Khóa học mặc định").trim();
 
-  // 1. Kiểm tra các trường bắt buộc
   if (!fullName || !email || !zalo) {
     return createJsonResponse({
       success: false,
@@ -72,27 +86,19 @@ function handleRegistration(data) {
     });
   }
 
-  // Chuẩn hóa số Zalo (loại bỏ khoảng trắng, dấu chấm, dấu gạch ngang)
   zalo = zalo.replace(/[\s\.\-\+]/g, "");
-  if (zalo.startsWith("84")) {
-    zalo = "0" + zalo.substring(2);
-  }
+  if (zalo.startsWith("84")) zalo = "0" + zalo.substring(2);
 
-  var sheet = getOrCreateSheet();
+  var sheet = getOrCreateRegistrationSheet();
   var lastRow = sheet.getLastRow();
 
-  // 2. Kiểm tra trùng lặp trong Google Sheet
+  // Kiểm tra trùng lặp
   if (lastRow > 1) {
-    // Lấy toàn bộ dữ liệu từ dòng 2 (bỏ qua hàng tiêu đề)
-    // Cột 1: Thời gian, Cột 2: Họ Tên, Cột 3: Email, Cột 4: Số Zalo
-    var values = sheet.getRange(2, 1, lastRow - 1, 6).getValues();
-
+    var values = sheet.getRange(2, 1, lastRow - 1, 4).getValues();
     for (var i = 0; i < values.length; i++) {
       var rowEmail = (values[i][2] || "").toString().trim().toLowerCase();
       var rowZalo = (values[i][3] || "").toString().trim().replace(/[\s\.\-\+]/g, "");
-      if (rowZalo.startsWith("84")) {
-        rowZalo = "0" + rowZalo.substring(2);
-      }
+      if (rowZalo.startsWith("84")) rowZalo = "0" + rowZalo.substring(2);
 
       if (rowEmail === email && rowZalo === zalo) {
         return createJsonResponse({
@@ -102,7 +108,6 @@ function handleRegistration(data) {
           message: "Email và Số Zalo này đã được đăng ký trước đó rồi ạ!"
         });
       }
-
       if (rowEmail === email) {
         return createJsonResponse({
           success: false,
@@ -111,7 +116,6 @@ function handleRegistration(data) {
           message: "Email (" + email + ") đã tồn tại trong danh sách học viên!"
         });
       }
-
       if (rowZalo === zalo) {
         return createJsonResponse({
           success: false,
@@ -123,19 +127,16 @@ function handleRegistration(data) {
     }
   }
 
-  // 3. Ghi dữ liệu học viên mới vào Sheet
   var timestamp = Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "dd/MM/yyyy HH:mm:ss");
   var newRow = [
-    timestamp,    // Cột A: Thời gian đăng ký
-    fullName,     // Cột B: Họ và tên
-    email,        // Cột C: Email
-    "'" + zalo,   // Cột D: Số Zalo (thêm ' để giữ số 0 ở đầu)
-    "Đã xác nhận" // Cột E: Trạng thái
+    timestamp,
+    fullName,
+    email,
+    "'" + zalo,
+    "Đã xác nhận"
   ];
 
   sheet.appendRow(newRow);
-
-  // Định dạng lại dòng vừa thêm (căn lề giữa cho thời gian và SĐT)
   var newRowIndex = sheet.getLastRow();
   sheet.getRange(newRowIndex, 1).setHorizontalAlignment("center");
   sheet.getRange(newRowIndex, 4).setHorizontalAlignment("center");
@@ -153,17 +154,12 @@ function handleRegistration(data) {
   });
 }
 
-/**
- * Chỉ kiểm tra trùng lặp (không ghi vào Sheet)
- */
 function checkDuplicateOnly(data) {
   var email = (data.email || "").trim().toLowerCase();
   var zalo = (data.zalo || "").trim().replace(/[\s\.\-\+]/g, "");
-  if (zalo.startsWith("84")) {
-    zalo = "0" + zalo.substring(2);
-  }
+  if (zalo.startsWith("84")) zalo = "0" + zalo.substring(2);
 
-  var sheet = getOrCreateSheet();
+  var sheet = getOrCreateRegistrationSheet();
   var lastRow = sheet.getLastRow();
 
   if (lastRow <= 1) {
@@ -174,9 +170,7 @@ function checkDuplicateOnly(data) {
   for (var i = 0; i < values.length; i++) {
     var rowEmail = (values[i][2] || "").toString().trim().toLowerCase();
     var rowZalo = (values[i][3] || "").toString().trim().replace(/[\s\.\-\+]/g, "");
-    if (rowZalo.startsWith("84")) {
-      rowZalo = "0" + rowZalo.substring(2);
-    }
+    if (rowZalo.startsWith("84")) rowZalo = "0" + rowZalo.substring(2);
 
     if (email && rowEmail === email) {
       return createJsonResponse({
@@ -200,55 +194,178 @@ function checkDuplicateOnly(data) {
 }
 
 /**
- * Lấy hoặc tự động tạo Sheet với Header định dạng chuyên nghiệp
+ * ===================================================================
+ * MODULE 2: KHẢO SÁT HỌC VIÊN & TÍNH TOÁN REALTIME %
+ * ===================================================================
  */
-function getOrCreateSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_NAME);
+function handleSurveySubmit(data) {
+  var fullName = (data.fullName || "").trim();
+  var zalo = (data.zalo || "").trim().replace(/[\s\.\-\+]/g, "");
+  if (zalo.startsWith("84")) zalo = "0" + zalo.substring(2);
 
-  if (!sheet) {
-    // Nếu chưa có, đổi tên sheet đầu tiên hoặc tạo sheet mới
-    sheet = ss.getSheets()[0];
-    sheet.setName(SHEET_NAME);
+  var answers = data.answers || {};
+
+  if (!fullName || !zalo) {
+    return createJsonResponse({
+      success: false,
+      message: "Vui lòng nhập Họ Tên và Số Zalo để gửi phiếu khảo sát!"
+    });
   }
 
-  // Nếu hàng 1 chưa có tiêu đề, tạo bộ tiêu đề chuẩn
-  if (sheet.getLastRow() === 0) {
-    var headers = [
-      "Thời Gian", 
-      "Họ Và Tên", 
-      "Email Học Viên", 
-      "Số Zalo / Phone", 
-      "Trạng Thái"
-    ];
-    sheet.appendRow(headers);
+  var sheet = getOrCreateSurveySheet();
+  var timestamp = Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "dd/MM/yyyy HH:mm:ss");
 
-    // Trang trí Header chuyên nghiệp (Navy Blue chuẩn Giáo Dục)
-    var headerRange = sheet.getRange(1, 1, 1, headers.length);
-    headerRange.setBackground("#1E3A8A"); // Màu xanh Navy
-    headerRange.setFontColor("#FFFFFF"); // Chữ trắng
-    headerRange.setFontWeight("bold");
-    headerRange.setHorizontalAlignment("center");
-    headerRange.setVerticalAlignment("middle");
-    sheet.setRowHeight(1, 36);
+  var rowData = [
+    timestamp,
+    fullName,
+    "'" + zalo,
+    answers.q1 || "",
+    answers.q2 || "",
+    answers.q3 || "",
+    answers.q4 || "",
+    answers.q5 || "",
+    answers.q6 || "",
+    answers.q7 || "",
+    answers.q8 || "",
+    answers.q9 || "",
+    answers.q10 || ""
+  ];
 
-    // Cố định dòng tiêu đề
-    sheet.setFrozenRows(1);
+  sheet.appendRow(rowData);
+  var newRowIndex = sheet.getLastRow();
+  sheet.getRange(newRowIndex, 1).setHorizontalAlignment("center");
+  sheet.getRange(newRowIndex, 3).setHorizontalAlignment("center");
 
-    // Độ rộng các cột
-    sheet.setColumnWidth(1, 170); // Thời gian
-    sheet.setColumnWidth(2, 220); // Họ tên
-    sheet.setColumnWidth(3, 260); // Email
-    sheet.setColumnWidth(4, 160); // Số Zalo
-    sheet.setColumnWidth(5, 140); // Trạng thái
-  }
-
-  return sheet;
+  // Trả về thống kê realtime mới nhất
+  return getSurveyStats(true);
 }
 
 /**
- * Trả về kết quả JSON với Header CORS đầy đủ
+ * Tính toán tỷ lệ % và số lượt chọn realtime của 10 câu hỏi
  */
+function getSurveyStats(isAfterSubmit) {
+  var sheet = getOrCreateSurveySheet();
+  var lastRow = sheet.getLastRow();
+
+  var stats = {
+    totalResponses: 0,
+    questions: {}
+  };
+
+  for (var q = 1; q <= 10; q++) {
+    stats.questions["q" + q] = { total: 0, options: {} };
+  }
+
+  if (lastRow > 1) {
+    var values = sheet.getRange(2, 1, lastRow - 1, 13).getValues();
+    stats.totalResponses = values.length;
+
+    for (var i = 0; i < values.length; i++) {
+      var row = values[i];
+      for (var q = 1; q <= 10; q++) {
+        var ans = (row[q + 2] || "").toString().trim();
+        if (ans) {
+          var qKey = "q" + q;
+          stats.questions[qKey].total = (stats.questions[qKey].total || 0) + 1;
+          stats.questions[qKey].options[ans] = (stats.questions[qKey].options[ans] || 0) + 1;
+        }
+      }
+    }
+
+    // Tính phần trăm (%)
+    for (var qKey in stats.questions) {
+      var qData = stats.questions[qKey];
+      var percentages = {};
+      if (qData.total > 0) {
+        for (var opt in qData.options) {
+          var count = qData.options[opt];
+          percentages[opt] = Math.round((count / qData.total) * 1000) / 10; // Làm tròn 1 chữ số thập phân
+        }
+      }
+      qData.percentages = percentages;
+    }
+  }
+
+  return createJsonResponse({
+    success: true,
+    message: isAfterSubmit ? "Gửi phiếu khảo sát thành công!" : "Lấy thống kê khảo sát thành công!",
+    data: stats
+  });
+}
+
+/**
+ * ===================================================================
+ * HELPER: TẠO VÀ ĐỊNH DẠNG SHEET TỰ ĐỘNG
+ * ===================================================================
+ */
+function getOrCreateRegistrationSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_REGISTRATION);
+  if (!sheet) {
+    sheet = ss.getSheets()[0];
+    sheet.setName(SHEET_REGISTRATION);
+  }
+
+  if (sheet.getLastRow() === 0) {
+    var headers = ["Thời Gian", "Họ Và Tên", "Email Học Viên", "Số Zalo / Phone", "Trạng Thái"];
+    sheet.appendRow(headers);
+    var headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setBackground("#1E3A8A");
+    headerRange.setFontColor("#FFFFFF");
+    headerRange.setFontWeight("bold");
+    headerRange.setHorizontalAlignment("center");
+    sheet.setRowHeight(1, 36);
+    sheet.setFrozenRows(1);
+    sheet.setColumnWidth(1, 170);
+    sheet.setColumnWidth(2, 220);
+    sheet.setColumnWidth(3, 260);
+    sheet.setColumnWidth(4, 160);
+    sheet.setColumnWidth(5, 140);
+  }
+  return sheet;
+}
+
+function getOrCreateSurveySheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_SURVEY);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_SURVEY);
+  }
+
+  if (sheet.getLastRow() === 0) {
+    var headers = [
+      "Thời Gian",
+      "Họ Và Tên",
+      "Số Zalo",
+      "Q1: Kinh Nghiệm AI",
+      "Q2: Hiểu Biết Agnes AI",
+      "Q3: Tư Duy Lập Trình",
+      "Q4: Rào Cản AI",
+      "Q5: Thời Gian Học/Tuần",
+      "Q6: Mục Tiêu Game",
+      "Q7: Thể Loại Game Muốn Học",
+      "Q8: Đối Tượng Học Sinh",
+      "Q9: Yếu Tố Quan Trọng Nhất",
+      "Q10: Kỳ Vọng Khóa Học"
+    ];
+    sheet.appendRow(headers);
+    var headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setBackground("#881337"); // Màu đỏ sơn mài sang trọng
+    headerRange.setFontColor("#FFFFFF");
+    headerRange.setFontWeight("bold");
+    headerRange.setHorizontalAlignment("center");
+    sheet.setRowHeight(1, 36);
+    sheet.setFrozenRows(1);
+    sheet.setColumnWidth(1, 170);
+    sheet.setColumnWidth(2, 200);
+    sheet.setColumnWidth(3, 150);
+    for (var col = 4; col <= 13; col++) {
+      sheet.setColumnWidth(col, 240);
+    }
+  }
+  return sheet;
+}
+
 function createJsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
