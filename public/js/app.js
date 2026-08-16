@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailInput = document.getElementById('email');
   const zaloInput = document.getElementById('zalo');
   const submitBtn = document.getElementById('submitBtn');
-  const btnText = submitBtn.querySelector('.btn-text');
-  const btnLoader = submitBtn.querySelector('.btn-loader');
+  const btnText = submitBtn.querySelector('.btn-text-content') || submitBtn.querySelector('.btn-text');
+  const btnLoader = submitBtn.querySelector('.btn-loader-content') || submitBtn.querySelector('.btn-loader');
 
   const successModal = document.getElementById('successModal');
   const modalCloseBtn = document.getElementById('modalCloseBtn');
