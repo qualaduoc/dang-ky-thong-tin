@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Ký Thông Tin Học Viên | Khóa Học Trực Tuyến</title>
+  <meta name="description" content="Cổng đăng ký thông tin học viên tham gia khóa học. Lưu thông tin trực tiếp và nhận tài liệu độc quyền qua Zalo/Email.">
+  
+  <!-- Google Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Background Decorative Shapes -->
+  <div class="bg-shape shape-1"></div>
+  <div class="bg-shape shape-2"></div>
+
+  <!-- Main Container -->
+  <main class="page-container">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="badge-tag">
+        <i data-lucide="graduation-cap" class="badge-icon"></i>
+        <span>CỔNG ĐĂNG KÝ HỌC VIÊN</span>
+      </div>
+      <h1 class="main-title">Đăng Ký Tham Gia Khóa Học</h1>
+      <p class="subtitle">
+        Vui lòng điền chính xác thông tin để Thầy và Ban Hỗ Trợ gửi tài liệu bài giảng, mã kích hoạt khóa học qua Email và Zalo của bạn.
+      </p>
+    </header>
+
+    <!-- Form Section -->
+    <div class="form-wrapper">
+      <div class="card-glass">
+        
+        <!-- Form Header -->
+        <div class="card-header">
+          <div class="card-title-group">
+            <h2 class="card-title">Phiếu Nhập Thông Tin</h2>
+            <p class="card-desc">Các mục có dấu <span class="required-star">*</span> là bắt buộc</p>
+          </div>
+          <div class="card-pill">
+            <i data-lucide="shield-check" class="pill-icon"></i>
+            <span>Chống trùng lặp 100%</span>
+          </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="registrationForm" novalidate>
+          
+          <!-- Field: Họ và Tên -->
+          <div class="form-group" id="group-fullName">
+            <label for="fullName" class="form-label">
+              <span>Họ và Tên</span>
+              <span class="required-star">*</span>
+            </label>
+            <div class="input-container">
+              <i data-lucide="user" class="input-icon"></i>
+              <input 
+                type="text" 
+                id="fullName" 
+                name="fullName" 
+                class="form-input" 
+                placeholder="Ví dụ: Nguyễn Văn An"
+                autocomplete="name"
+                required
+              >
+              <span class="status-indicator"></span>
+            </div>
+            <div class="feedback-msg" id="msg-fullName"></div>
+          </div>
+
+          <!-- Field: Email -->
+          <div class="form-group" id="group-email">
+            <label for="email" class="form-label">
+              <span>Địa Chỉ Email</span>
+              <span class="required-star">*</span>
+            </label>
+            <div class="input-container">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="form-input" 
+                placeholder="hocvien@gmail.com"
+                autocomplete="email"
+                required
+              >
+              <span class="status-indicator"></span>
+            </div>
+            <div class="feedback-msg" id="msg-email"></div>
+            <span class="field-hint">Dùng để nhận giáo trình và link phòng học trực tuyến.</span>
+          </div>
+
+          <!-- Field: Số Điện Thoại Zalo -->
+          <div class="form-group" id="group-zalo">
+            <label for="zalo" class="form-label">
+              <span>Số Điện Thoại Zalo</span>
+              <span class="required-star">*</span>
+            </label>
+            <div class="input-container">
+              <i data-lucide="phone" class="input-icon"></i>
+              <input 
+                type="tel" 
+                id="zalo" 
+                name="zalo" 
+                class="form-input" 
+                placeholder="0912 345 678"
+                autocomplete="tel"
+                maxlength="15"
+                required
+              >
+              <span class="status-indicator"></span>
+            </div>
+            <div class="feedback-msg" id="msg-zalo"></div>
+            <span class="field-hint">Nhập đúng số đang cài Zalo để được thêm vào nhóm học tập.</span>
+          </div>
+
+          <!-- Field: Lựa chọn Khóa học (Bổ trợ tăng tính tiện dụng) -->
+          <div class="form-group" id="group-course">
+            <label for="course" class="form-label">
+              <span>Khóa Học Quan Tâm</span>
+            </label>
+            <div class="input-container">
+              <i data-lucide="book-open" class="input-icon"></i>
+              <select id="course" name="course" class="form-input form-select">
+                <option value="Khóa Học Thực Chiến Toàn Diện">Khóa Học Thực Chiến Toàn Diện</option>
+                <option value="Khóa Học Nền Tảng Cơ Bản">Khóa Học Nền Tảng Cơ Bản</option>
+                <option value="Lớp Chuyên Đề Nâng Cao">Lớp Chuyên Đề Nâng Cao</option>
+                <option value="Tài Liệu & Khóa Học Miễn Phí">Tài Liệu & Khóa Học Miễn Phí</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Field: Lời nhắn / Mục tiêu (Tùy chọn) -->
+          <div class="form-group" id="group-note">
+            <label for="note" class="form-label">
+              <span>Mục Tiêu Hoặc Lời Nhắn Gửi Thầy (Không bắt buộc)</span>
+            </label>
+            <div class="input-container textarea-container">
+              <i data-lucide="message-square" class="input-icon textarea-icon"></i>
+              <textarea 
+                id="note" 
+                name="note" 
+                class="form-input form-textarea" 
+                rows="2" 
+                placeholder="Chia sẻ mong muốn hoặc câu hỏi của bạn với Thầy..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Anti-duplicate Notice Banner -->
+          <div class="notice-box">
+            <i data-lucide="info" class="notice-icon"></i>
+            <div class="notice-text">
+              <strong>Lưu ý:</strong> Hệ thống tự động kiểm tra và chỉ cho phép <strong>mỗi học viên đăng ký 1 lần</strong> theo Email hoặc Số Zalo để đảm bảo chất lượng lớp học.
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="form-action">
+            <button type="submit" id="submitBtn" class="btn-primary">
+              <span class="btn-text">
+                <i data-lucide="send" class="btn-icon"></i>
+                Hoàn Tất Đăng Ký
+              </span>
+              <span class="btn-loader" style="display: none;">
+                <span class="spinner"></span>
+                Đang xử lý & lưu dữ liệu...
+              </span>
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Trust Badges -->
+        <div class="trust-footer">
+          <div class="trust-item">
+            <i data-lucide="lock" class="trust-icon"></i>
+            <span>Bảo mật dữ liệu 100%</span>
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item">
+            <i data-lucide="zap" class="trust-icon"></i>
+            <span>Xử lý & phản hồi tự động</span>
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item">
+            <i data-lucide="check-circle" class="trust-icon"></i>
+            <span>Đồng bộ Google Sheets</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>© 2026 Bản quyền thuộc về Khóa Học Thầy Được. Mọi quyền được bảo lưu.</p>
+    </footer>
+
+  </main>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header-graphic">
+        <div class="success-icon-bubble">
+          <i data-lucide="check" class="success-icon-inner"></i>
+        </div>
+      </div>
+      <div class="modal-body">
+        <h3 class="modal-title">Đăng Ký Thành Công!</h3>
+        <p class="modal-desc">
+          Chúc mừng <strong id="successStudentName">bạn</strong> đã hoàn tất đăng ký. Thông tin của bạn đã được ghi nhận trực tiếp vào hệ thống.
+        </p>
+
+        <div class="summary-card">
+          <div class="summary-row">
+            <span class="summary-label"><i data-lucide="mail"></i> Email:</span>
+            <strong class="summary-value" id="successStudentEmail">--</strong>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label"><i data-lucide="phone"></i> Zalo:</span>
+            <strong class="summary-value" id="successStudentZalo">--</strong>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label"><i data-lucide="calendar"></i> Thời gian:</span>
+            <span class="summary-value" id="successStudentTime">--</span>
+          </div>
+        </div>
+
+        <div class="next-step-box">
+          <h4>📌 Bước tiếp theo:</h4>
+          <ol>
+            <li>Kiểm tra tin nhắn Zalo từ Ban Hỗ Trợ để vào nhóm lớp.</li>
+            <li>Kiểm tra hộp thư Email (kể cả mục Quảng cáo/Spam).</li>
+          </ol>
+        </div>
+
+        <button type="button" class="btn-primary modal-close-btn" id="modalCloseBtn">
+          <span>Đã Hiểu & Đóng Lại</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- App Script -->
+  <script src="js/app.js"></script>
+  <script>
+    // Khởi tạo các biểu tượng Lucide
+    lucide.createIcons();
+  </script>
+</body>
+</html>

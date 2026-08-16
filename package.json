@@ -1,0 +1,24 @@
+{
+  "name": "dang-ky-thong-tin-hoc-vien",
+  "version": "1.0.0",
+  "description": "Ứng dụng đăng ký thông tin học viên kết nối Google Sheets và chống trùng lặp dữ liệu",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "education",
+    "registration",
+    "google-sheets",
+    "anti-duplicate"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0"
+  }
+}

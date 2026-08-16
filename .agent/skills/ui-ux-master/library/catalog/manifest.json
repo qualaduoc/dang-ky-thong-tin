@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "updated": "2026-07-18",
+  "protocol": "design-suggest-v1",
+  "paths": {
+    "blocks": "blocks/",
+    "recipes": "references/recipes/",
+    "industries": "references/industries/",
+    "external": "library/external/",
+    "skill": "skills/ui-ux-master/SKILL.md"
+  },
+  "blocks": [
+    {
+      "id": "block.nav.minimal-single-line",
+      "title": "Minimal single-line nav",
+      "category": "nav",
+      "file": "blocks/nav/minimal-single-line.md",
+      "surface": ["landing", "portfolio", "marketing"],
+      "dials": { "variance": [3, 8], "motion": [1, 6], "density": [2, 5] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["nav", "header", "sticky"]
+    },
+    {
+      "id": "block.hero.asymmetric-split",
+      "title": "Asymmetric split hero",
+      "category": "hero",
+      "file": "blocks/hero/asymmetric-split.md",
+      "surface": ["landing", "saas", "product"],
+      "dials": { "variance": [6, 10], "motion": [3, 8], "density": [2, 5] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["hero", "split", "cta"]
+    },
+    {
+      "id": "block.hero.editorial-manifesto",
+      "title": "Editorial manifesto hero",
+      "category": "hero",
+      "file": "blocks/hero/editorial-manifesto.md",
+      "surface": ["portfolio", "agency", "brand"],
+      "dials": { "variance": [7, 10], "motion": [2, 6], "density": [1, 4] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["hero", "typography", "editorial"]
+    },
+    {
+      "id": "block.hero.product-demo",
+      "title": "Product demo hero",
+      "category": "hero",
+      "file": "blocks/hero/product-demo.md",
+      "surface": ["saas", "landing", "devtool"],
+      "dials": { "variance": [4, 7], "motion": [4, 8], "density": [3, 6] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["hero", "product", "screenshot"]
+    },
+    {
+      "id": "block.features.bento-rhythm",
+      "title": "Bento grid with rhythm",
+      "category": "features",
+      "file": "blocks/features/bento-rhythm.md",
+      "surface": ["landing", "saas", "product"],
+      "dials": { "variance": [6, 9], "motion": [3, 7], "density": [3, 6] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["features", "bento", "grid"]
+    },
+    {
+      "id": "block.features.zigzag-capped",
+      "title": "Zigzag features (max 2)",
+      "category": "features",
+      "file": "blocks/features/zigzag-capped.md",
+      "surface": ["landing", "marketing"],
+      "dials": { "variance": [5, 8], "motion": [3, 6], "density": [3, 5] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["features", "split", "image-text"]
+    },
+    {
+      "id": "block.features.icon-rows",
+      "title": "Icon feature rows (not 3 equal cards)",
+      "category": "features",
+      "file": "blocks/features/icon-rows.md",
+      "surface": ["landing", "saas", "docs"],
+      "dials": { "variance": [3, 6], "motion": [1, 4], "density": [4, 7] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["features", "list", "icons"]
+    },
+    {
+      "id": "block.social.logo-wall",
+      "title": "Logo wall under hero",
+      "category": "social",
+      "file": "blocks/social/logo-wall.md",
+      "surface": ["landing", "saas"],
+      "dials": { "variance": [2, 6], "motion": [1, 4], "density": [3, 6] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["social-proof", "logos"]
+    },
+    {
+      "id": "block.pricing.two-tier-honest",
+      "title": "Two-tier honest pricing",
+      "category": "pricing",
+      "file": "blocks/pricing/two-tier-honest.md",
+      "surface": ["landing", "saas"],
+      "dials": { "variance": [4, 7], "motion": [2, 5], "density": [4, 7] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["pricing", "conversion"]
+    },
+    {
+      "id": "block.dashboard.shell-sidebar",
+      "title": "Dashboard shell + sidebar",
+      "category": "dashboard",
+      "file": "blocks/dashboard/shell-sidebar.md",
+      "surface": ["dashboard", "app", "admin"],
+      "dials": { "variance": [1, 4], "motion": [1, 3], "density": [7, 10] },
+      "stack": ["react", "next", "tailwind"],
+      "tags": ["dashboard", "shell", "sidebar"]
+    },
+    {
+      "id": "block.dashboard.kpi-row",
+      "title": "KPI metrics row",
+      "category": "dashboard",
+      "file": "blocks/dashboard/kpi-row.md",
+      "surface": ["dashboard", "app"],
+      "dials": { "variance": [2, 5], "motion": [1, 4], "density": [7, 10] },
+      "stack": ["react", "next", "tailwind"],
+      "tags": ["dashboard", "metrics", "kpi"]
+    },
+    {
+      "id": "block.forms.auth-split",
+      "title": "Auth split panel",
+      "category": "forms",
+      "file": "blocks/forms/auth-split.md",
+      "surface": ["auth", "saas"],
+      "dials": { "variance": [4, 7], "motion": [2, 5], "density": [3, 5] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["auth", "login", "form"]
+    },
+    {
+      "id": "block.cta.full-bleed",
+      "title": "Full-bleed CTA band",
+      "category": "cta",
+      "file": "blocks/cta/full-bleed.md",
+      "surface": ["landing", "marketing"],
+      "dials": { "variance": [4, 8], "motion": [2, 6], "density": [2, 5] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["cta", "conversion"]
+    },
+    {
+      "id": "block.footer.compact",
+      "title": "Compact footer",
+      "category": "footer",
+      "file": "blocks/footer/compact.md",
+      "surface": ["landing", "portfolio", "saas", "docs"],
+      "dials": { "variance": [2, 6], "motion": [1, 3], "density": [3, 6] },
+      "stack": ["html", "react", "next", "tailwind"],
+      "tags": ["footer"]
+    }
+  ],
+  "recipes": [
+    {
+      "id": "recipe.saas-landing",
+      "title": "SaaS marketing landing",
+      "file": "references/recipes/saas-landing.md",
+      "surface": ["landing", "saas"],
+      "industries": ["saas", "devtool", "fintech"],
+      "dials": { "variance": 7, "motion": 6, "density": 4 },
+      "blocks": [
+        "block.nav.minimal-single-line",
+        "block.hero.asymmetric-split",
+        "block.social.logo-wall",
+        "block.features.bento-rhythm",
+        "block.pricing.two-tier-honest",
+        "block.cta.full-bleed",
+        "block.footer.compact"
+      ],
+      "search_query": "saas b2b productivity landing modern"
+    },
+    {
+      "id": "recipe.portfolio-studio",
+      "title": "Designer / studio portfolio",
+      "file": "references/recipes/portfolio-studio.md",
+      "surface": ["portfolio", "agency"],
+      "industries": ["agency", "creative"],
+      "dials": { "variance": 8, "motion": 7, "density": 3 },
+      "blocks": [
+        "block.nav.minimal-single-line",
+        "block.hero.editorial-manifesto",
+        "block.features.zigzag-capped",
+        "block.cta.full-bleed",
+        "block.footer.compact"
+      ],
+      "search_query": "portfolio creative studio editorial"
+    },
+    {
+      "id": "recipe.saas-dashboard",
+      "title": "SaaS app dashboard",
+      "file": "references/recipes/saas-dashboard.md",
+      "surface": ["dashboard", "app"],
+      "industries": ["saas", "fintech", "ops"],
+      "dials": { "variance": 3, "motion": 3, "density": 8 },
+      "blocks": [
+        "block.dashboard.shell-sidebar",
+        "block.dashboard.kpi-row"
+      ],
+      "search_query": "analytics dashboard dense product ui"
+    },
+    {
+      "id": "recipe.pricing-page",
+      "title": "Standalone pricing page",
+      "file": "references/recipes/pricing-page.md",
+      "surface": ["landing", "saas"],
+      "industries": ["saas"],
+      "dials": { "variance": 5, "motion": 4, "density": 5 },
+      "blocks": [
+        "block.nav.minimal-single-line",
+        "block.pricing.two-tier-honest",
+        "block.features.icon-rows",
+        "block.cta.full-bleed",
+        "block.footer.compact"
+      ],
+      "search_query": "saas pricing conversion clear tiers"
+    },
+    {
+      "id": "recipe.auth-screens",
+      "title": "Login / signup screens",
+      "file": "references/recipes/auth-screens.md",
+      "surface": ["auth"],
+      "industries": ["saas", "consumer"],
+      "dials": { "variance": 5, "motion": 3, "density": 4 },
+      "blocks": ["block.forms.auth-split"],
+      "search_query": "auth login form accessible clean"
+    },
+    {
+      "id": "recipe.settings-billing",
+      "title": "Settings & billing",
+      "file": "references/recipes/settings-billing.md",
+      "surface": ["app", "dashboard"],
+      "industries": ["saas"],
+      "dials": { "variance": 2, "motion": 2, "density": 7 },
+      "blocks": [
+        "block.dashboard.shell-sidebar"
+      ],
+      "search_query": "settings billing form product dense"
+    }
+  ],
+  "industries": [
+    { "id": "saas", "file": "references/industries/saas.md" },
+    { "id": "fintech", "file": "references/industries/fintech.md" },
+    { "id": "healthcare", "file": "references/industries/healthcare.md" },
+    { "id": "agency", "file": "references/industries/agency.md" },
+    { "id": "devtool", "file": "references/industries/devtool.md" },
+    { "id": "ecommerce", "file": "references/industries/ecommerce.md" }
+  ],
+  "external": [
+    {
+      "id": "ext.nuxt-ui.v4",
+      "title": "Nuxt UI v4 — Vue layouts & recipes",
+      "meta": "library/external/nuxt-ui-v4/META.md",
+      "skill": "skills/nuxt-ui/SKILL.md",
+      "surface": ["landing", "dashboard", "docs", "chat", "auth", "editor"],
+      "industries": ["saas", "devtool", "agency"],
+      "dials": { "variance": [4, 8], "motion": [2, 6], "density": [3, 8] },
+      "stack": ["vue", "nuxt", "tailwind"],
+      "tags": ["nuxt-ui", "vue", "components", "dashboard", "landing"]
+    },
+    {
+      "id": "ext.ant-design.react",
+      "title": "Ant Design — enterprise React system",
+      "meta": "library/external/ant-design/META.md",
+      "skill": "skills/ant-design/SKILL.md",
+      "surface": ["dashboard", "app", "admin", "form", "data"],
+      "industries": ["saas", "fintech", "ops", "enterprise"],
+      "dials": { "variance": [1, 4], "motion": [1, 4], "density": [6, 10] },
+      "stack": ["react", "antd"],
+      "tags": ["antd", "enterprise", "table", "form", "admin"]
+    }
+  ],
+  "selection_rules": {
+    "always_propose_count": 3,
+    "prefer_recipe_over_ad_hoc": true,
+    "prefer_external_when_dials_match": true,
+    "forbid_outside_catalog_unless_gap": true,
+    "search_after_selection": true
+  }
+}
