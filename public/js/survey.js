@@ -1,11 +1,11 @@
 /**
  * ===================================================================
- * LOGIC TRANG KHẢO SÁT & HIỂN THỊ KẾT QUẢ REALTIME (%)
+ * LOGIC TRANG KHẢO SÁT & HIỂN THỊ BIỂU ĐỒ CỘT REALTIME (%) BÊN PHẢI
  * ===================================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Cấu hình danh mục 10 câu hỏi & các lựa chọn để đối soát
+  // 1. Cấu hình danh mục 10 câu hỏi & các lựa chọn
   const QUESTIONS_DATA = [
     {
       id: 'q1',
@@ -168,11 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   // 2. Tham chiếu DOM
-  const tabFormBtn = document.getElementById('tabFormBtn');
-  const tabStatsBtn = document.getElementById('tabStatsBtn');
-  const viewForm = document.getElementById('viewForm');
-  const viewStats = document.getElementById('viewStats');
-
   const surveyForm = document.getElementById('surveyForm');
   const fullNameInput = document.getElementById('fullName');
   const zaloInput = document.getElementById('zalo');
@@ -187,35 +182,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const refreshStatsBtn = document.getElementById('refreshStatsBtn');
   const toastContainer = document.getElementById('toastContainer');
 
+  // Mobile elements
+  const tabFormBtn = document.getElementById('tabFormBtn');
+  const tabStatsBtn = document.getElementById('tabStatsBtn');
+  const surveyFormColumn = document.getElementById('surveyFormColumn');
+  const surveyChartColumn = document.getElementById('surveyChartColumn');
+
   let isSubmitting = false;
-  let pollInterval = null;
 
-  // 3. Xử lý Chuyển Tab (Form ⟷ Stats)
-  tabFormBtn.addEventListener('click', () => switchTab('form'));
-  tabStatsBtn.addEventListener('click', () => switchTab('stats'));
-
-  function switchTab(tabName) {
-    if (tabName === 'form') {
+  // 3. Mobile View Switcher
+  if (tabFormBtn && tabStatsBtn) {
+    tabFormBtn.addEventListener('click', () => {
       tabFormBtn.classList.add('active');
       tabStatsBtn.classList.remove('active');
-      viewForm.classList.add('active');
-      viewStats.classList.remove('active');
-      if (pollInterval) clearInterval(pollInterval);
-    } else {
+      surveyFormColumn.classList.remove('hidden-mobile');
+      surveyChartColumn.classList.remove('active-mobile');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    tabStatsBtn.addEventListener('click', () => {
       tabStatsBtn.classList.add('active');
       tabFormBtn.classList.remove('active');
-      viewStats.classList.add('active');
-      viewForm.classList.remove('active');
+      surveyFormColumn.classList.add('hidden-mobile');
+      surveyChartColumn.classList.add('active-mobile');
       loadRealtimeStats();
-      // Bật polling tự động 12s/lần khi ở tab Stats
-      if (!pollInterval) {
-        pollInterval = setInterval(loadRealtimeStats, 12000);
-      }
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
-  // 4. Theo dõi Tiến độ hoàn thành 10 câu hỏi
+  // 4. Theo dõi Tiến độ hoàn thành 10 câu hỏi & liên kết biểu đồ
   const radioInputs = surveyForm.querySelectorAll('input[type="radio"]');
   radioInputs.forEach(radio => {
     radio.addEventListener('change', (e) => {
@@ -225,6 +220,19 @@ document.addEventListener('DOMContentLoaded', () => {
         parentCard.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
         const label = radio.closest('.option-item');
         if (label) label.classList.add('selected');
+
+        // Scroll nhẹ biểu đồ bên phải đến câu tương ứng nếu trên desktop
+        const qId = parentCard.getAttribute('data-q');
+        const targetChartCard = document.getElementById(`chart-${qId}`);
+        if (targetChartCard && window.innerWidth >= 1024) {
+          targetChartCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          targetChartCard.style.borderColor = '#FEF08A';
+          targetChartCard.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.4)';
+          setTimeout(() => {
+            targetChartCard.style.borderColor = '';
+            targetChartCard.style.boxShadow = '';
+          }, 1000);
+        }
       }
       updateProgress();
     });
@@ -296,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (missingQuestions.length > 0) {
-      showToast(`Bạn còn câu số [${missingQuestions.join(', ')}] chưa chọn. Vui lòng hoàn thành đủ 10 câu!`, 'warning');
+      showToast(`Bạn còn câu số [${missingQuestions.join(', ')}] chưa chọn. Vui lòng chọn đủ 10 câu!`, 'warning');
       const firstMissingCard = surveyForm.querySelector(`.question-card[data-q="q${missingQuestions[0]}"]`);
       if (firstMissingCard) {
         firstMissingCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -320,8 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await response.json();
 
       if (result.success) {
-        showToast('Cảm ơn bạn! Phiếu khảo sát đã được gửi và ghi nhận.', 'success');
-        // Reset form & chuyển sang tab xem kết quả realtime
+        showToast('Cảm ơn bạn! Phiếu khảo sát đã được gửi và cập nhật biểu đồ.', 'success');
+        // Reset form & cập nhật biểu đồ
         surveyForm.reset();
         surveyForm.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
         updateProgress();
@@ -329,7 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (result.data) {
           renderStatsView(result.data);
         }
-        setTimeout(() => switchTab('stats'), 600);
+
+        // Trên màn hình mobile, tự chuyển sang tab biểu đồ
+        if (window.innerWidth < 1024 && tabStatsBtn) {
+          tabStatsBtn.click();
+        }
       } else {
         showToast(result.message || 'Không thể gửi phiếu. Vui lòng thử lại!', 'error');
       }
@@ -344,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 7. Tải và Render Kết Quả Thống Kê Realtime (%)
+  // 7. Tải và Render Kết Quả Biểu Đồ Cột Realtime (%)
   async function loadRealtimeStats() {
     try {
       const res = await fetch('/api/survey-stats');
@@ -357,16 +369,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  refreshStatsBtn.addEventListener('click', () => {
-    const icon = refreshStatsBtn.querySelector('.refresh-icon');
-    if (icon) icon.style.animation = 'spin 0.6s linear infinite';
-    loadRealtimeStats().then(() => {
-      setTimeout(() => {
-        if (icon) icon.style.animation = '';
-      }, 600);
-      showToast('Đã cập nhật số liệu mới nhất!', 'success');
+  if (refreshStatsBtn) {
+    refreshStatsBtn.addEventListener('click', () => {
+      const icon = refreshStatsBtn.querySelector('.refresh-icon');
+      if (icon) icon.style.animation = 'spin 0.6s linear infinite';
+      loadRealtimeStats().then(() => {
+        setTimeout(() => {
+          if (icon) icon.style.animation = '';
+        }, 600);
+        showToast('Đã cập nhật biểu đồ mới nhất!', 'success');
+      });
     });
-  });
+  }
 
   function renderStatsView(statsData) {
     statsTotalCount.textContent = statsData.totalResponses || 0;
@@ -384,7 +398,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const card = document.createElement('div');
-      card.className = 'stat-card';
+      card.className = 'stat-mini-card';
+      card.id = `chart-${q.id}`;
 
       let optionsHtml = '';
       for (const [shortKey, fullLabel] of Object.entries(q.keyMap)) {
@@ -401,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </span>
               <div class="stat-opt-metric">
                 <span class="stat-percent">${percent}%</span>
-                <span class="stat-votes">(${votes} phiếu)</span>
+                <span class="stat-votes">(${votes})</span>
               </div>
             </div>
             <div class="stat-bar-track">
@@ -427,6 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.lucide) lucide.createIcons();
   }
 
-  // Tải dữ liệu stats sẵn sàng
+  // Tải dữ liệu biểu đồ ngay khi mở trang và lặp polling 10 giây/lần
   loadRealtimeStats();
+  setInterval(loadRealtimeStats, 10000);
 });
