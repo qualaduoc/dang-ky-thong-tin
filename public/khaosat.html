@@ -14,6 +14,9 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- Chart.js Library for Professional Analytics Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="css/survey.css">
 </head>
@@ -414,7 +417,7 @@
       </section>
 
 
-      <!-- ================= CỘT PHẢI: BIỂU ĐỒ HÌNH CỘT REALTIME (%) ================= -->
+      <!-- ================= CỘT PHẢI: PHÂN TÍCH BIỂU ĐỒ HÌNH CỘT REALTIME (%) ================= -->
       <aside class="survey-chart-column" id="surveyChartColumn">
         
         <div class="chart-sticky-panel">
@@ -424,15 +427,15 @@
             <div class="chart-header-title-box">
               <i data-lucide="bar-chart-3" class="chart-main-icon"></i>
               <div>
-                <h2 class="chart-main-title">Biểu Đồ Bình Chọn Realtime</h2>
-                <p class="chart-sub-title">Tự động cập nhật tỷ lệ % theo thời gian thực</p>
+                <h2 class="chart-main-title">Phân Tích Biểu Đồ Realtime</h2>
+                <p class="chart-sub-title">Biểu đồ cột & đường xu hướng bình chọn của lớp học</p>
               </div>
             </div>
 
             <div class="chart-meta-row">
               <div class="stats-total-pill">
                 <i data-lucide="users" class="stats-icon"></i>
-                <span>Tổng lượt: <strong id="statsTotalCount">0</strong> phiếu</span>
+                <span>Tổng: <strong id="statsTotalCount">0</strong> phiếu</span>
               </div>
               <span class="pulse-status"><span class="pulse-dot"></span>LIVE</span>
               <button type="button" class="btn-refresh-icon" id="refreshStatsBtn" title="Làm mới số liệu">
@@ -441,11 +444,40 @@
             </div>
           </div>
 
-          <!-- Danh sách 10 Biểu đồ Cột động -->
-          <div class="chart-cards-scroll" id="statsListContainer">
-            <div class="chart-loading-state">
-              <span class="survey-spinner"></span>
-              <p>Đang nạp dữ liệu bình chọn...</p>
+          <!-- Bộ Lọc Chọn Góc Nhìn Phân Tích (Toàn cảnh / Từng câu) -->
+          <div class="chart-view-selector">
+            <label for="chartQuestionSelect" class="chart-select-label">
+              <i data-lucide="filter" class="chart-select-icon"></i>
+              <span>Chọn nội dung phân tích:</span>
+            </label>
+            <select id="chartQuestionSelect" class="chart-select-dropdown">
+              <option value="overview">📊 [Toàn cảnh] Mức độ quan tâm 10 câu hỏi</option>
+              <option value="q1">Câu 01: Mức độ sử dụng AI</option>
+              <option value="q2">Câu 02: Trải nghiệm Agnes AI</option>
+              <option value="q3">Câu 03: Tư duy Logic & Lập trình</option>
+              <option value="q4">Câu 04: Rào cản khi dùng AI</option>
+              <option value="q5">Câu 05: Thời gian học mỗi tuần</option>
+              <option value="q6">Câu 06: Mục tiêu làm Game giáo dục</option>
+              <option value="q7">Câu 07: Thể loại Game mong muốn</option>
+              <option value="q8">Câu 08: Đối tượng học sinh phục vụ</option>
+              <option value="q9">Câu 09: Yếu tố quan trọng nhất</option>
+              <option value="q10">Câu 10: Kỳ vọng sau khóa học</option>
+            </select>
+          </div>
+
+          <!-- Khung Vẽ Biểu Đồ Cột & Đường (Canvas Chart.js) -->
+          <div class="chart-canvas-container">
+            <canvas id="surveyAnalyticsChart"></canvas>
+          </div>
+
+          <!-- Bảng Tóm Tắt & Phân Tích Nhanh (Key Insights) -->
+          <div class="chart-insights-card" id="chartInsightsCard">
+            <div class="insights-header">
+              <i data-lucide="sparkles" class="insights-icon"></i>
+              <span class="insights-title">Điểm Nhấn Phân Tích Lớp Học</span>
+            </div>
+            <div class="insights-body" id="insightsBody">
+              <p class="insights-item">🏆 <strong>Đang tổng hợp dữ liệu bình chọn...</strong></p>
             </div>
           </div>
 
