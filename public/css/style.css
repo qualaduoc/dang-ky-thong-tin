@@ -1,27 +1,27 @@
 /* ===================================================================
    HỆ THỐNG ĐĂNG KÝ HỌC VIÊN - PHONG CÁCH VĂN HÓA DÂN GIAN VIỆT NAM
-   Chủ đề: Trống Đồng Đông Sơn, Hoa Sen, Tre Xanh, Sơn Mài Truyền Thống
+   Chủ đề: Trống Đồng, Hoa Sen, Tre Xanh, Sơn Mài Truyền Thống
 =================================================================== */
 
 :root {
-  /* Bảng màu Cung Đình & Dân Gian Việt Nam */
-  --bg-deep-lacquer: #1A0604;
-  --bg-dark-wood: #2D0C07;
+  /* Bảng màu Sơn Mài & Dân Gian Việt Nam */
+  --bg-deep-lacquer: #120302;
+  --bg-dark-wood: #1E0604;
   --gold-primary: #D4AF37;
   --gold-light: #FDE047;
-  --gold-dark: #92400E;
+  --gold-dark: #854D0E;
   
   --ink-brown: #3E1B0A;
   --ink-dark: #240F04;
-  --parchment: #FBF4E6;
+  --parchment: #FBF5E8;
   --parchment-border: #D9C3A3;
   
   --lacquer-red: #881337;
   --lacquer-red-hover: #9F1239;
   
-  --text-title-gold: #FCE7B8;
+  --text-title-gold: #FDE68A;
   --text-body-cream: #E2D9C8;
-  --text-muted-gold: #BFA888;
+  --text-muted-gold: #C2A781;
   
   --font-display: 'Playfair Display', Georgia, serif;
   --font-serif: 'Cinzel', 'Playfair Display', serif;
@@ -45,7 +45,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 1. NỀN HOA VĂN DÂN GIAN VIỆT NAM (Trống đồng & Vân mây) */
+/* 1. NỀN MỜ ÊM DỊU, KHÔNG HÌNH TRÒN GÂY RỐI MẮT */
 .vietnamese-bg {
   position: fixed;
   top: 0;
@@ -54,45 +54,52 @@ body {
   height: 100vh;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 20%, #3B1009 0%, #1F0704 55%, #0F0201 100%);
+  background: radial-gradient(ellipse at 50% 30%, #2A0805 0%, #160403 60%, #0A0101 100%);
   overflow: hidden;
 }
 
-/* Họa tiết Trống Đồng Đông Sơn Vector chìm */
-.dongson-pattern {
-  position: absolute;
-  inset: 0;
-  background-image: 
-    radial-gradient(circle at 50% 50%, transparent 0%, transparent 60%, rgba(212, 175, 55, 0.05) 60%, transparent 61%),
-    radial-gradient(circle at 50% 50%, transparent 0%, transparent 40%, rgba(212, 175, 55, 0.04) 40%, transparent 41%),
-    radial-gradient(circle at 50% 50%, transparent 0%, transparent 20%, rgba(212, 175, 55, 0.05) 20%, transparent 21%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23D4AF37' fill-opacity='0.04'%3E%3Cpath d='M60 0 C70 30 90 50 120 60 C90 70 70 90 60 120 C50 90 30 70 0 60 C30 50 50 30 60 0 Z'/%3E%3Ccircle cx='60' cy='60' r='12' fill='none' stroke='%23D4AF37' stroke-width='1.5'/%3E%3C/g%3E%3C/svg%3E");
-  opacity: 0.85;
-}
-
-/* Đốm sáng lồng đèn ấm áp */
+/* Hào quang vàng kim êm dịu phía sau khung tranh */
 .lantern-glow {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px);
+  filter: blur(120px);
   pointer-events: none;
 }
 
 .glow-top {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(234, 179, 8, 0.15) 0%, transparent 70%);
-  top: -120px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, rgba(180, 83, 9, 0.05) 50%, transparent 80%);
+  top: -150px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .glow-bottom {
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(225, 29, 72, 0.12) 0%, transparent 70%);
-  bottom: -100px;
-  right: -50px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(136, 19, 55, 0.12) 0%, transparent 70%);
+  bottom: -120px;
+  right: 10%;
+}
+
+/* Làn sương mây khói mờ ảo truyền thống */
+.traditional-clouds {
+  position: absolute;
+  width: 500px;
+  height: 250px;
+  background: radial-gradient(ellipse, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+  filter: blur(60px);
+}
+
+.cloud-left {
+  top: 25%;
+  left: -100px;
+}
+
+.cloud-right {
+  bottom: 20%;
+  right: -100px;
 }
 
 /* 2. KHUNG BỐ CỤC CHÍNH */
@@ -101,17 +108,17 @@ body {
   z-index: 1;
   max-width: 720px;
   margin: 0 auto;
-  padding: 30px 16px 40px;
+  padding: 32px 16px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
 }
 
-/* Header Dân Gian */
+/* Header Tiêu Đề */
 .app-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   max-width: 600px;
 }
 
@@ -119,17 +126,17 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
   color: var(--gold-primary);
-  padding: 5px 16px;
+  padding: 5px 18px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .heritage-dot {
@@ -141,18 +148,18 @@ body {
 
 .main-title-heritage {
   font-family: var(--font-display);
-  font-size: clamp(26px, 5vw, 34px);
+  font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text-title-gold);
   line-height: 1.25;
   margin-bottom: 8px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(212, 175, 55, 0.25);
 }
 
 .subtitle-heritage {
   font-size: 14px;
   color: var(--text-muted-gold);
-  line-height: 1.5;
+  line-height: 1.55;
   max-width: 520px;
   margin: 0 auto;
 }
@@ -160,16 +167,16 @@ body {
 /* 3. KHUNG POSTER TRANH DÂN GIAN & FORM OVERLAY */
 .poster-container {
   width: 100%;
-  max-width: 540px;
+  max-width: 520px;
   margin: 0 auto;
 }
 
 .poster-frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 864 / 1152; /* Giữ đúng tỷ lệ ảnh gốc */
-  filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.75)) drop-shadow(0 4px 15px rgba(212, 175, 55, 0.15));
-  border-radius: 20px;
+  aspect-ratio: 864 / 1152; /* Tỷ lệ ảnh gốc */
+  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 30px rgba(212, 175, 55, 0.15));
+  border-radius: 22px;
   overflow: hidden;
   transition: transform 0.3s ease;
 }
@@ -235,14 +242,14 @@ body {
   height: 6.5%;
 }
 
-/* Style cho các ô Input phong cách Dân Gian */
+/* Style cho các ô Input phong cách Dân Gian (Trong suốt, tiệp màu tranh) */
 .heritage-input {
   width: 100%;
   height: 100%;
   background: transparent;
   border: 1.5px solid transparent;
   border-radius: 8px;
-  padding: 0 12px;
+  padding: 0 14px;
   font-family: var(--font-body);
   font-size: clamp(13px, 2.7vw, 16px);
   font-weight: 600;
@@ -252,52 +259,42 @@ body {
 }
 
 .heritage-input::placeholder {
-  color: rgba(92, 44, 22, 0.45);
-  font-size: clamp(11.5px, 2.4vw, 14px);
+  color: rgba(120, 53, 15, 0.4);
+  font-size: clamp(11.5px, 2.3vw, 13.5px);
   font-style: italic;
   font-weight: 400;
 }
 
+/* Khi bấm vào ô nhập */
 .heritage-input:focus {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 253, 245, 0.6);
   border-color: var(--gold-dark);
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.35), inset 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 2.5px rgba(212, 175, 55, 0.4), inset 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-/* Báo lỗi trực quan trên từng ô */
+/* Tránh lỗi trình duyệt tự đổ màu trắng khi autofill */
+.heritage-input:-webkit-autofill,
+.heritage-input:-webkit-autofill:hover, 
+.heritage-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #FDF8ED inset !important;
+  -webkit-text-fill-color: #240F04 !important;
+  border-radius: 8px;
+}
+
+/* Trạng thái lỗi: Viền đỏ tinh tế không che chữ bên dưới */
 .field-slot.has-error .heritage-input {
   border-color: #DC2626 !important;
-  background: rgba(254, 226, 226, 0.5) !important;
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25) !important;
+  background: rgba(254, 226, 226, 0.4) !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.35) !important;
 }
 
 .field-slot.has-success .heritage-input {
   border-color: rgba(5, 150, 105, 0.6);
 }
 
-/* Tooltip thông báo lỗi bay nhẹ dưới input */
+/* Thông báo lỗi gọn gàng */
 .slot-feedback {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  font-size: clamp(10px, 2vw, 12px);
-  font-weight: 600;
-  color: #B91C1C;
-  background: rgba(254, 242, 242, 0.95);
-  border: 1px solid #F87171;
-  border-radius: 4px;
-  padding: 2px 6px;
-  margin-top: 3px;
-  z-index: 10;
-  display: none;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-  line-height: 1.3;
-}
-
-.field-slot.has-error .slot-feedback {
-  display: block;
-  animation: fadeInDown 0.2s ease;
+  display: none; /* Dùng Toast thông báo để không che mất nhãn bên dưới */
 }
 
 /* Nút Submit Đăng Ký (Phủ lên nút đỏ sơn mài trong tranh) */
@@ -314,13 +311,13 @@ body {
   font-family: var(--font-display);
   font-size: clamp(15px, 3.2vw, 20px);
   font-weight: 800;
-  color: transparent; /* Nền tranh đã có chữ "Đăng ký", để transparent hoặc ánh kim */
+  color: transparent;
   transition: all 0.2s ease;
 }
 
 .heritage-submit-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 16px rgba(234, 179, 8, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 18px rgba(234, 179, 8, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.2);
   border-color: rgba(253, 224, 71, 0.5);
 }
 
@@ -333,17 +330,18 @@ body {
   opacity: 0.7;
 }
 
-/* Khi đang nạp dữ liệu (Loading) */
+/* Khi đang lưu dữ liệu */
 .btn-loader-content {
   display: flex;
   align-items: center;
   gap: 8px;
   color: #FFF8E7;
   font-size: clamp(12px, 2.5vw, 15px);
-  background: rgba(136, 19, 55, 0.9);
-  padding: 4px 10px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  background: rgba(136, 19, 55, 0.95);
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--gold-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .heritage-spinner {
@@ -364,7 +362,7 @@ body {
   margin-top: 22px;
   background: rgba(26, 6, 4, 0.6);
   border: 1px solid rgba(212, 175, 55, 0.2);
-  padding: 8px 18px;
+  padding: 8px 20px;
   border-radius: 999px;
   backdrop-filter: blur(8px);
   flex-wrap: wrap;
@@ -397,14 +395,14 @@ body {
   color: rgba(191, 168, 136, 0.7);
 }
 
-/* 5. MODAL THÀNH CÔNG KIỂU CHIẾU THƯ / THIỆP HOA SEN CỔ TRUYỀN */
+/* 5. MODAL THÀNH CÔNG KIỂU THIỆP GẤM CỔ TRUYỀN */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(10, 2, 1, 0.82);
+  background: rgba(10, 2, 1, 0.85);
   backdrop-filter: blur(6px);
   z-index: 999;
   display: flex;
@@ -419,9 +417,9 @@ body {
   color: var(--ink-dark);
   width: 100%;
   max-width: 460px;
-  border-radius: 16px;
-  border: 3px solid var(--gold-primary);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.35);
+  border-radius: 18px;
+  border: 2.5px solid var(--gold-primary);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 175, 55, 0.3);
   overflow: hidden;
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: center;
@@ -536,24 +534,24 @@ body {
 /* 6. TOAST NOTIFICATION */
 .toast-container {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 24px;
+  right: 24px;
   z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 360px;
+  max-width: 380px;
 }
 
 .toast {
   background: #FFFDF9;
-  border-radius: 8px;
-  padding: 12px 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
+  gap: 12px;
+  font-size: 13.5px;
   border-left: 4px solid var(--gold-primary);
   color: var(--ink-dark);
   animation: slideInRight 0.25s ease;
@@ -578,9 +576,9 @@ body {
 }
 
 .toast-icon {
-  width: 16px;
-  height: 16px;
-  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
   flex-shrink: 0;
 }
 
@@ -604,11 +602,6 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes slideInRight {
   from { opacity: 0; transform: translateX(30px); }
   to { opacity: 1; transform: translateX(0); }
@@ -625,11 +618,11 @@ body {
   }
   
   .poster-frame {
-    border-radius: 14px;
+    border-radius: 16px;
   }
 
   .trust-banner {
-    padding: 6px 12px;
+    padding: 6px 14px;
     gap: 8px;
   }
   
@@ -638,9 +631,9 @@ body {
   }
 
   .toast-container {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
     max-width: none;
   }
 }
